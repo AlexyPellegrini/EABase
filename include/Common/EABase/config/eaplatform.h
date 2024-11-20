@@ -619,6 +619,22 @@
 // __sun is defined by the GCC compiler.
 // __i386 is defined by the Sun and GCC compilers.
 // __sparc is defined by the Sun and GCC compilers.
+#elif defined(__EMSCRIPTEN__)
+	// For additional information: https://emscripten.org/docs/compiling/Building-Projects.html#detecting-emscripten-in-preprocessor
+	#undef  EA_PLATFORM_WASM
+	#define EA_PLATFORM_WASM 1
+	#define EA_PLATFORM_POSIX 1 // most standard posix API are available with emscripten, pthread requires -pthread option
+	// "Emscripten behaves like a variant of Unix, so the preprocessor defines unix, 
+	//  __unix and __unix__ are always present when compiling code with Emscripten."
+	#define EA_PLATFORM_UNIX 1
+	#define EA_PLATFORM_NAME "wasm"
+	#define EA_PROCESSOR_WASM 1 // not really a processor, but a virtual machine IR
+	// https://emscripten.org/docs/porting/guidelines/portability_guidelines.html#code-that-cannot-be-compiled:
+	// "Emscripten-compiled code currently requires a little-endian host to run on"
+	#define EA_SYSTEM_LITTLE_ENDIAN 1
+	#define EA_PLATFORM_DESCRIPTION "WASM built with Emscripten"
+	// Pointers are 32-bits. Memory64 proposal may change that, but is currently unsupported.
+	#define EA_PLATFORM_PTR_SIZE 4
 #else
 	#error Unknown platform
 	#error Unknown processor
